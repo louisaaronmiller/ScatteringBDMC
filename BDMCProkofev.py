@@ -227,13 +227,13 @@ def HistogramBuilder(Type,q,qprime,qdprime,chi,potential,ZA_frozen,qvals,deltaq,
     bin_q = get_bin(q,deltaq)
 
     if Type == 0:
-        sign = np.sign(u(q))
+        sign = np.sign(u(q,potential))
     elif Type == 1:
         sign = np.sign(u(usqrt(q,qprime,chi),potential) * u(qprime,potential))
     elif Type == 2:
-        sign = np.sign(u(usqrt(q,qprime,chi),potential) * Fq(qprime,ZA_frozen,qvals,deltaq,H_frozen))
+        sign = np.sign(u(usqrt(q,qprime,chi),potential) * Fq(qprime,ZA_frozen,qvals,deltaq,H_frozen,potential))
     elif Type == 3:
-        sign = np.sign(u(usqrt(q,qprime,chi),potential) * u(usqrt(qprime,qdprime,chi),potential) * Fq(qdprime,ZA_frozen,qvals,deltaq,H_frozen))
+        sign = np.sign(u(usqrt(q,qprime,chi),potential) * u(usqrt(qprime,qdprime,chi),potential) * Fq(qdprime,ZA_frozen,qvals,deltaq,H_frozen,potential))
 
     H_measured[bin_q] += sign
     return H_measured
@@ -263,13 +263,17 @@ def BLDMC(PAA,PAB,PAC,PCA,PCD,PBA,PDC,N,M,q0,deltaq,potential,lam): #PBA = PDC =
     '''
     Type = 0
     Nbins = int(q0/deltaq)
-    qvals = np.linspace(0, q0, Nbins)
+    qvals = np.arange(Nbins) * deltaq
     u_weights = Uweights(qvals,deltaq,potential)
     H_measured = np.zeros(Nbins)
     H_frozen = np.zeros(Nbins)
-    q = seedu(qvals,deltaq,potential,u_weights)
 
-    ZA_frozen = 0
+    q = seedu(qvals,deltaq,potential,u_weights)
+    qprime = 0
+    qdprime = 0
+    chi = 0
+
+    ZA_frozen = 1
     DiagramAsum = 0
     DiagramBsum = 0
     DiagramCsum = 0
@@ -279,15 +283,18 @@ def BLDMC(PAA,PAB,PAC,PCA,PCD,PBA,PDC,N,M,q0,deltaq,potential,lam): #PBA = PDC =
 
     for i in range(M):
         H_measured[:] = 0.0
+        
 
         for _ in range(N):
             r = np.random.random()
 
             if Type == 0:
                 if r < PAA:
+                    q = seedu(qvals,deltaq,potential,u_weights)
                     r2 = np.random.random()
                     if r2 < RAA():
                         Type = 0 
+
 
 
                 elif r < (PAA+PAB):
@@ -314,9 +321,6 @@ def BLDMC(PAA,PAB,PAC,PCA,PCD,PBA,PDC,N,M,q0,deltaq,potential,lam): #PBA = PDC =
             elif Type == 2:
 
                 if r < PCA:
-                    chi = seedchi()
-                    qprime = seedu(qvals,deltaq,potential,u_weights)
-
                     r2 = np.random.random()
                     if r2 < PXY(RCA(q,qprime,PCA,PAC,lam,qvals,deltaq,potential,chi)):
                         Type = 0
@@ -354,5 +358,5 @@ def BLDMC(PAA,PAB,PAC,PCA,PCD,PBA,PDC,N,M,q0,deltaq,potential,lam): #PBA = PDC =
 
     return scattering_length_array
 
-print(BLDMC(PAA=0.2,PAB=0.4,PAC=0.4,PCA=0.5,PCD=0.5,PBA=1,PDC=1,N = 100000000,M = 30,q0=20,deltaq=0.001,potential=-3,lam=1.5))
+print(BLDMC(PAA=0.2,PAB=0.4,PAC=0.4,PCA=0.5,PCD=0.5,PBA=1,PDC=1,N = 10000000,M = 30,q0=20,deltaq=0.001,potential=-3,lam=1.5))
 
