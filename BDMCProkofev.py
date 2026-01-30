@@ -287,7 +287,6 @@ def BLDMC(PAA,PAB,PAC,PCA,PCD,PBA,PDC,N,M,q0,deltaq,potential,lam): #PBA = PDC =
 
         for _ in range(N):
             r = np.random.random()
-
             if Type == 0:
                 if r < PAA:
                     q = seedu(qvals,deltaq,potential,u_weights)
@@ -358,5 +357,5 @@ def BLDMC(PAA,PAB,PAC,PCA,PCD,PBA,PDC,N,M,q0,deltaq,potential,lam): #PBA = PDC =
 
     return scattering_length_array
 
-print(BLDMC(PAA=0.2,PAB=0.4,PAC=0.4,PCA=0.5,PCD=0.5,PBA=1,PDC=1,N = 10000000,M = 30,q0=20,deltaq=0.001,potential=-3,lam=1.5))
+print(BLDMC(PAA=0.2,PAB=0.4,PAC=0.4,PCA=0.5,PCD=0.5,PBA=1,PDC=1,N = 1000000,M = 100,q0=10,deltaq=0.01,potential=-10,lam=1))
 
