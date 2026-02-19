@@ -478,7 +478,7 @@ for i in potlist:
         PCA=0.5, PCD=0.5,
         PBA=1, PDC=1,
         N=1000000000, M=100,
-        q0=10, deltaq=0.01,
+        q0=3, deltaq=0.01,
         potential=i, lam=1,
         H_approx=H_approx, ZA_approx=ZA_approx
     )
