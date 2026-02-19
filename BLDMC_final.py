@@ -22,7 +22,7 @@ IMPORTANT
 Iu is the function that generates I_u to be used
 this is because Iu was constantly called upon and made the runtime very long
 
-OPTIMIZATION (minimal edits, same style):
+OPTIMIZATION:
 1) Cache If_frozen once per outer iteration (instead of recomputing HistogramSum inside acceptance ratios).
 2) Precompute CDF for |H_frozen| once per outer iteration (seedf becomes O(log Nbins)).
 3) Precompute CDF for |u(q)| weights once per run (seedu becomes O(log Nbins)).
